@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>词友</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <style type="text/css">
+        html, body {
+            margin: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: #E0E0E0;
+        }
+        #canvas {
+            width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #header {
+            width: 100%;
+            height: 40px;
+            bottom: 20px;
+            box-shadow: 0 1px 5px rgba(34, 25, 25, 0.4);
+            margin-bottom: 60px;
+            background-color: black;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        #title {
+            margin-left: 20px;
+            margin-right: 20px; 
+            height: 40px;
+            line-height: 40px;
+            font-family: "Arial";
+            font-size: 20px;
+            text-shadow: 0 0 0.2em #FFF;
+
+            color: #FFFFFF;
+        }
+        .card {
+            margin-top: 20px;
+            width: 520px;
+            height: 320px;
+            background-color: white;
+            box-shadow: 0 1px 5px rgba(34, 25, 25, 0.4);
+            padding: 40px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        #show_card > #word {
+            font-family: "Arial";
+            font-size: 60px;
+            text-shadow: 0 1px 5px rgba(34, 25, 25, 0.4);
+            height: 159px;
+            line-height: 159px;
+        }
+        #show_card > #splitter {
+            height: 2px;
+            background-image: -webkit-linear-gradient(left, #FFFFFF, #111, #FFFFFF); 
+        }
+        #show_card > #pronounciation {
+            font-family: "Arial";
+            font-size: 30px;
+            text-shadow: 0 1px 5px rgba(34, 25, 25, 0.4);
+            height: 59px;
+            line-height: 59px;
+            float: bottom;
+        }
+        #show_card > #explanation {
+            font-family: "Arial";
+            font-size: 30px;
+            text-shadow: 0 1px 5px rgba(34, 25, 25, 0.4);
+            height: 100px;
+            float: top;
+        }
+
+        #test_card > #pronounciation {
+            font-family: "Arial";
+            font-size: 30px;
+            text-shadow: 0 1px 5px rgba(34, 25, 25, 0.4);
+            height: 59px;
+            float: bottom;
+        }
+        #test_card > #word {
+            font-family: "Arial";
+            font-size: 60px;
+            text-shadow: 0 1px 5px rgba(34, 25, 25, 0.4);
+            height: 80px;
+            margin-top: 80px;
+        }
+        #test_card > #answer {
+            height: 160px;
+            width: 120px;
+            margin-left: 200px;
+            margin-right: 200px;
+            text-align: center;
+        }
+        #choice_card > #word {
+            font-family: "Arial";
+            font-size: 60px;
+            text-shadow: 0 1px 5px rgba(34, 25, 25, 0.4);
+            height: 80px;
+            margin-top: 20px;
+        }
+
+        #choice_card > #pronounciation {
+            font-family: "Arial";
+            font-size: 30px;
+            text-shadow: 0 1px 5px rgba(34, 25, 25, 0.4);
+            height: 59px;
+            float: bottom;
+        }
+        .answer-button {
+            width: 38px;
+            height: 38px;
+            border-radius: 5px;
+            border: 1px solid black;
+            display: block;
+            float: left;
+            margin-left: 5px;
+            margin-right: 5px;
+            padding: 5px;
+            font-size: 40px;
+            font-family: Arial;
+            text-align: center;
+            line-height: 40px;
+            color: white;
+        }
+        .choice-button {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            border: 1px solid black;
+            display: block;
+            float: left;
+            margin-left: 5px;
+            margin-right: 5px;
+            padding: 5px;
+            font-size: 20px;
+            font-family: Arial;
+            text-align: center;
+            line-height: 20px;
+            color: black;
+        }
+        .choice_explanation {
+            font-size: 20px;
+            font-family: Arial;
+        }
+        #choice_card > #answer {
+            height: 160px;
+            width: 520px;
+        }
+        #choice_card > #answer > div {
+            display: inline;
+            width: 520px;
+            height: 40px;
+            float: left;
+        }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var wordlist = [
+            {"word": "prodigious",
+            "pronounciation": "[prə'didʒəs]",
+            "explanation": "adj. 巨大的,奇异的; n. 奇迹"},
+            {"word": "corpulence",
+            "pronounciation": "['kɔ:pjʊləns]",
+            "explanation": "n. 肥胖, 臃肿"},
+            {"word": "hominid",
+            "pronounciation": "['hɔminid]",
+            "explanation": "n. 原始人类 adj. 灵长类的"}
+            {"word": "inextricable",
+            "pronounciation": "[ˌɪnɪk'strɪkəbl]",
+            "explanation": "adj. 无法摆脱的, 纠缠的"}
+        ];
+        var updateWord = function(index){
+            elements = ["word","pronounciation","explanation"];
+            console.log(index);
+            for (var i in elements) {
+                var e = elements[i];
+                $("#"+e).html(wordlist[index][e]);
+            };
+        }
+        var index = 0;
+
+        var KeyPressed = function (e) {
+            var key = ( window.event ) ? event.keyCode : e.keyCode; 
+            switch( key )
+            {
+            case 37:
+                console.log("left pressed");
+                index = (index - 1 + wordlist.length) % wordlist.length;
+                updateWord(index);
+                break;
+            case 39:
+                console.log("right pressed");
+                index = (index + 1 + wordlist.length) % wordlist.length;
+                updateWord(index);
+                break;
+            }
+        };
+        document.onkeyup = KeyPressed;
+    });
+    </script>
+</head>
+<body>
+    <div id="canvas">
+        <div id="header">
+            <div id="title">词友</div>
+        </div>
+        <div id="container">
+            <div id="show_card" class="card">
+                <div id="word">prodigious</div>
+                <div id="splitter"></div>
+                <div id="pronounciation">[prə'didʒəs]</div>
+                <div id="explanation">adj. 巨大的,奇异的; n. 奇迹</div>
+            </div>
+            <div id="test_card" class="card">
+                <div id="word">prodigious</div>
+                <div id="pronounciation">[prə'didʒəs]</div>
+                <div id="answer">
+                     <div id="yes_button" class="answer-button btn btn-success">&Omicron;</div>
+                     <div id="no_button" class="answer-button btn btn-danger">&#10006;</div>
+                 </div> 
+            </div>
+            <div id="choice_card" class="card">
+                <div id="word">prodigious</div>
+                <div id="pronounciation">[prə'didʒəs]</div>
+                <div id="answer">
+                    <div>
+                        <div id="a_button" class="choice-button btn">A</div>
+                        <div class="choice_explanation"> adj. 巨大的,奇异的; n. 奇迹</div>
+                    </div>                    
+                    <div>
+                        <div id="b_button" class="choice-button btn">B</div>
+                        <div class="choice_explanation"> n. 肥胖, 臃肿</div>
+                    </div>
+                    <div>
+                        <div id="b_button" class="choice-button btn">C</div>
+                        <div class="choice_explanation"> n. 原始人类 adj. 灵长类的</div>
+                    </div>
+                    <div>
+                        <div id="d_button" class="choice-button btn">D</div>
+                        <div class="choice_explanation"> adj. 无法摆脱的, 纠缠的</div>
+                    </div>
+                 </div> 
+            </div>
+        </div>
+        <div id="footer"></div>
+    </div>
+</body>
+</html>
