@@ -4,6 +4,5 @@ node_js:
   - 0.6
 script:
   - "echo Travis rocks"
-  - "node build"
   - "npm test"
-
+  - "istanbul cover test/*"
