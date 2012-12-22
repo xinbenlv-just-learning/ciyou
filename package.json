@@ -2,10 +2,14 @@
   "name": "node-example",
   "version": "0.0.1",
   "dependencies": {
-    "connect": "2.7.x"
+    "connect": "2.7.x",
+    "vows": "0.7.0"
   },
   "engines": {
     "node": "0.8.x",
     "npm": "1.1.x"
   }
+  "scripts": {
+    "test": "vows --spec"
+  },
 }
