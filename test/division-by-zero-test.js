@@ -1,7 +1,8 @@
 // division-by-zero-test.js
 
 var vows = require('vows'),
-    assert = require('assert');
+    assert = require('assert'),
+    theadd = require('./../theadd');
 
 // Create a Test Suite
 vows.describe('Division by Zero').addBatch({
@@ -22,6 +23,12 @@ vows.describe('Division by Zero').addBatch({
             'is not equal to itself': function (topic) {
                 assert.notEqual (topic, topic);
             }
+        }
+    },
+    ' when add': {
+        topic: theadd.add,
+        'we get add xxx': function(topic) {
+            assert.equal(true,true);
         }
     }
 }).exportTo(module); // Run it
