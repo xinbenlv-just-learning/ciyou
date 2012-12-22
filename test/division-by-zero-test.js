@@ -2,7 +2,6 @@
 
 var vows = require('vows'),
     assert = require('assert'),
-    theadd = require('./../theadd');
 
 // Create a Test Suite
 vows.describe('Division by Zero').addBatch({
@@ -25,10 +24,4 @@ vows.describe('Division by Zero').addBatch({
             }
         }
     },
-    ' when add': {
-        topic: theadd.add,
-        'we get add xxx': function(topic) {
-            assert.equal(true,true);
-        }
-    }
 }).exportTo(module); // Run it
