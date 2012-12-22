@@ -11,6 +11,6 @@
     "npm": "1.1.x"
   },
   "scripts": {
-    "test": "vows test/* --spec --isolate",
+    "test": "vows test/* --spec --isolate"
   }
 }
