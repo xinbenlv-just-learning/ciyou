@@ -3,6 +3,9 @@ node_js:
   - 0.8
   - 0.6
 script:
-  - "echo Travis rocks"
+  - "echo ========== JSHint =========="
+  - "jshint ."
+  - "echo ========== UniteTest =========="
   - "npm test"
+  - "echo ========== Code coverage =========="
   - "istanbul cover test/*"
