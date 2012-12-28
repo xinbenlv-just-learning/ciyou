@@ -163,47 +163,64 @@
     </style>
     <script type="text/javascript">
     $(document).ready(function() {
-        var wordlist = [
-            {"word": "prodigious",
-            "pronounciation": "[prə'didʒəs]",
-            "explanation": "adj. 巨大的,奇异的; n. 奇迹"},
-            {"word": "corpulence",
-            "pronounciation": "['kɔ:pjʊləns]",
-            "explanation": "n. 肥胖, 臃肿"},
-            {"word": "hominid",
-            "pronounciation": "['hɔminid]",
-            "explanation": "n. 原始人类 adj. 灵长类的"}
-            {"word": "inextricable",
-            "pronounciation": "[ˌɪnɪk'strɪkəbl]",
-            "explanation": "adj. 无法摆脱的, 纠缠的"}
-        ];
+        var getWordlistLength = function (callback) {
+            $.getJSON("/api/wordlist/1", null, function (d){
+                console.log("wordlist d=");
+                console.log(d);
+                callback(d["length"]);
+            });
+        };
+
+        var getWord = function (index,callback) {
+            $.getJSON("/api/word/" + index, null, function (d){
+                console.log("word d=");
+                console.log(d);
+                
+                callback(d);
+            });
+        }            
+            
         var updateWord = function(index){
             elements = ["word","pronounciation","explanation"];
             console.log(index);
-            for (var i in elements) {
-                var e = elements[i];
-                $("#"+e).html(wordlist[index][e]);
-            };
+            callback = function(content) {
+                for (var i in elements) {
+                    var e = elements[i];
+                    $("#"+e).html(content[e]);
+                }
+            }
+            getWord(index,callback);
         }
+
         var index = 0;
+        var wordlistLength = 0;
 
         var KeyPressed = function (e) {
+            if (wordlistLength == 0) {
+                console.log("wordlistLength = 0!");
+                return;
+            }
             var key = ( window.event ) ? event.keyCode : e.keyCode; 
             switch( key )
             {
             case 37:
                 console.log("left pressed");
-                index = (index - 1 + wordlist.length) % wordlist.length;
+                index = (index - 1 + wordlistLength) % wordlistLength;
                 updateWord(index);
                 break;
             case 39:
                 console.log("right pressed");
-                index = (index + 1 + wordlist.length) % wordlist.length;
+                index = (index + 1 + wordlistLength) % wordlistLength;
                 updateWord(index);
                 break;
             }
         };
+
         document.onkeyup = KeyPressed;
+
+        getWordlistLength(function (ret) {
+            wordlistLength = ret;
+        });
     });
     </script>
 </head>
