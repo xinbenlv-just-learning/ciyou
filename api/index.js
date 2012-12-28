@@ -48,7 +48,7 @@
         res.send({
             "id": req.params.id,
             "name": "GRE",
-            "length": wordlist.length
+            "len": wordlist.length
         }); //TODO(zzn)
     };
  
